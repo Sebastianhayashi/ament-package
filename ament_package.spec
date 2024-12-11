@@ -6,7 +6,7 @@
 %global __provides_exclude_from ^/usr/.*$
 %global __requires_exclude_from ^/usr/.*$
 
-Name:           ros-jazzy-ament-package-0.16.3
+Name:           ros-jazzy-ament-package
 Version:        0.16.3
 Release:        0%{?dist}%{?release_suffix}
 Summary:        ROS ament_package package
