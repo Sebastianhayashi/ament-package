@@ -1,0 +1,5 @@
+---
+version_control: git
+src_repo: https://github.com/ament/ament_package.git
+tag_prefix: 0.16.3
+separator: "."
