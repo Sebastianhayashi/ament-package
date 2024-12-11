@@ -12,7 +12,7 @@ Release:        0%{?dist}%{?release_suffix}
 Summary:        ROS ament_package package
 
 License:        Apache License 2.0
-Source0:        %{name}-%{version}.tar.gz
+Source0:        ros-jazzy-ament-package-0.16.3.tar.gz
 
 Requires:       python3-importlib-metadata
 Requires:       python3-importlib-resources
