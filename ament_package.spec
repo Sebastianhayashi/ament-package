@@ -1,6 +1,7 @@
 %bcond_without tests
 %bcond_without weak_deps
 %define debug_package %{nil}
+%define ros_distro jazzy
 
 %global __os_install_post %(echo '%{__os_install_post}' | sed -e 's!/opt/ros/%{ros_distro}/lib[^[:space:]]*/brp-python-bytecompile[[:space:]].*$!!g')
 %global __provides_exclude_from ^/opt/ros/%{ros_distro}/.*$
