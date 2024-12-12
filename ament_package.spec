@@ -34,8 +34,25 @@ The parser for the manifest files in the ament buildsystem.
 # In case we're installing to a non-standard location, look for a setup.sh
 # in the install tree and source it.  It will set things like
 # CMAKE_PREFIX_PATH, PKG_CONFIG_PATH, and PYTHONPATH.
-if [ -f "/usr/setup.sh" ]; then . "/usr/setup.sh"; fi
-%py3_build
+if [ -f "/opt/ros/%{ros_distro}/setup.sh" ]; then . "/opt/ros/%{ros_distro}/setup.sh"; fi
+mkdir -p .obj-%{_target_platform} && cd .obj-%{_target_platform}
+%cmake3 \
+    -UINCLUDE_INSTALL_DIR \
+    -ULIB_INSTALL_DIR \
+    -USYSCONF_INSTALL_DIR \
+    -USHARE_INSTALL_PREFIX \
+    -ULIB_SUFFIX \
+    -DCMAKE_INSTALL_PREFIX="/opt/ros/%{ros_distro}" \
+    -DAMENT_PREFIX_PATH="/opt/ros/%{ros_distro}" \
+    -DCMAKE_PREFIX_PATH="/opt/ros/%{ros_distro}" \
+    -DSETUPTOOLS_DEB_LAYOUT=OFF \
+%if !0%{?with_tests}
+    -DBUILD_TESTING=OFF \
+%endif
+    ..
+
+%make_build
+
 
 %install
 # In case we're installing to a non-standard location, look for a setup.sh
@@ -58,7 +75,7 @@ else echo "RPM TESTS SKIPPED"; fi
 %endif
 
 %files
-/usr
+/opt/ros/%{ros_distro}
 
 %changelog
 * Tue Dec 10 2024 Dharini Dutia <dharini@openrobotics.org> - 0.16.3-0
