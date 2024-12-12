@@ -37,14 +37,8 @@ The parser for the manifest files in the ament buildsystem.
 if [ -f "/opt/ros/%{ros_distro}/setup.sh" ]; then . "/opt/ros/%{ros_distro}/setup.sh"; fi
 mkdir -p .obj-%{_target_platform} && cd .obj-%{_target_platform}
 %cmake3 \
-    -UINCLUDE_INSTALL_DIR \
-    -ULIB_INSTALL_DIR \
-    -USYSCONF_INSTALL_DIR \
-    -USHARE_INSTALL_PREFIX \
-    -ULIB_SUFFIX \
     -DCMAKE_INSTALL_PREFIX="/opt/ros/%{ros_distro}" \
     -DAMENT_PREFIX_PATH="/opt/ros/%{ros_distro}" \
-    -DCMAKE_PREFIX_PATH="/opt/ros/%{ros_distro}" \
     -DSETUPTOOLS_DEB_LAYOUT=OFF \
 %if !0%{?with_tests}
     -DBUILD_TESTING=OFF \
@@ -58,8 +52,8 @@ mkdir -p .obj-%{_target_platform} && cd .obj-%{_target_platform}
 # In case we're installing to a non-standard location, look for a setup.sh
 # in the install tree and source it.  It will set things like
 # CMAKE_PREFIX_PATH, PKG_CONFIG_PATH, and PYTHONPATH.
-if [ -f "/usr/setup.sh" ]; then . "/usr/setup.sh"; fi
-%py3_install -- --prefix "/usr"
+if [ -f "/opt/ros/%{ros_distro}/setup.sh" ]; then . "/opt/ros/%{ros_distro}/setup.sh"; fi
+%py3_install -- --prefix "/opt/ros/%{ros_distro}"
 
 %if 0%{?with_tests}
 %check
@@ -69,13 +63,17 @@ if [ -n "$TEST_TARGET" ] && %__python3 -m pytest --version; then
 # In case we're installing to a non-standard location, look for a setup.sh
 # in the install tree and source it.  It will set things like
 # CMAKE_PREFIX_PATH, PKG_CONFIG_PATH, and PYTHONPATH.
-if [ -f "/usr/setup.sh" ]; then . "/usr/setup.sh"; fi
+if [ -f "/opt/ros/%{ros_distro}/setup.sh" ]; then . "/opt/ros/%{ros_distro}/setup.sh"; fi
 %__python3 -m pytest $TEST_TARGET || echo "RPM TESTS FAILED"
 else echo "RPM TESTS SKIPPED"; fi
 %endif
 
 %files
-/opt/ros/%{ros_distro}
+%dir /opt/ros/%{ros_distro}
+/opt/ros/%{ros_distro}/bin/*
+/opt/ros/%{ros_distro}/lib/*
+/opt/ros/%{ros_distro}/share/*
+%config(noreplace) /opt/ros/%{ros_distro}/setup.sh
 
 %changelog
 * Tue Dec 10 2024 Dharini Dutia <dharini@openrobotics.org> - 0.16.3-0
