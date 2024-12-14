@@ -23,6 +23,7 @@ BuildRequires:  python%{python3_pkgversion}-devel
 %if 0%{?with_tests}
 BuildRequires:  python3-flake8
 BuildRequires:  python3-pytest
+BuildRequires: ros-jazzy-ament-package
 %endif
 
 %description
